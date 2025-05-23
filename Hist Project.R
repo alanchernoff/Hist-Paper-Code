@@ -49,6 +49,9 @@ stargazer(
   float = TRUE
 )
 
+medians <- apply(dfb, 2, median, na.rm = TRUE)
+print(medians)
+
 ########segment data######
 start=which(df$Date=="2005-04-01")
 stop=which(df$Date=="2007-03-30")
@@ -65,6 +68,9 @@ stop=which(df$Date=="2011-03-31")
 dft$datemarker[start:stop] <- "C"
 dfpost=df[start:stop,]
 dfpost <- dfpost[, -c(1)]
+nrow(dfpre)
+nrow(dfdur)
+nrow(dfpost)
 
 ########Create Mean and Variance Tables######
 dfmean <- data.frame(matrix(ncol = 3, nrow = ncol(dfpre)))
@@ -81,15 +87,15 @@ colnames(dflev) <- c("Test-Statistic","P-Value")
 
 #Populate the Empty Tables
 for (i in 1:nrow(dfmean)){
-    dfmean[i,1] <- mean(dfpre[,i])
-    dfmean[i,2] <- mean(dfdur[,i])
-    dfmean[i,3] <- mean(dfpost[,i])
-    dfstd[i,1] <- sd(dfpre[,i])
-    dfstd[i,2] <- sd(dfdur[,i])
-    dfstd[i,3] <- sd(dfpost[,i])
-    lev <- leveneTest(dft[,(i+1)] ~ datemarker, data = dft)
-    dflev[i,1] <- lev$`F value`[1]
-    dflev[i,2] <- lev$`Pr(>F)`[1]
+  dfmean[i,1] <- mean(dfpre[,i])
+  dfmean[i,2] <- mean(dfdur[,i])
+  dfmean[i,3] <- mean(dfpost[,i])
+  dfstd[i,1] <- sd(dfpre[,i])
+  dfstd[i,2] <- sd(dfdur[,i])
+  dfstd[i,3] <- sd(dfpost[,i])
+  lev <- leveneTest(dft[,(i+1)] ~ datemarker, data = dft)
+  dflev[i,1] <- lev$`F value`[1]
+  dflev[i,2] <- lev$`Pr(>F)`[1]
 }
 
 #View(dfmean)
